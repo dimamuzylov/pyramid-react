@@ -1,0 +1,8 @@
+#ton-connect-button {
+    width: 100% !important;
+
+    button {
+        width: 100%;
+        justify-content: center;
+    }
+}

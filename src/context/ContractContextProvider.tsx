@@ -23,7 +23,7 @@ export const ContractContextProvider: React.FunctionComponent<Props> = (
 
   const [state, setState] = useState<
     Pick<ContractContextState, 'user' | 'loading'>
-  >({ user: null, loading: true });
+  >({ user: null, loading: false });
 
   const mainContract = useInit(async () => {
     if (!client) return;
@@ -35,6 +35,7 @@ export const ContractContextProvider: React.FunctionComponent<Props> = (
 
   useEffect(() => {
     if (!mainContract || !userFriendlyAddress) return;
+    setState({ loading: true, user: null });
     mainContract.getUser(Address.parse(userFriendlyAddress)).then((user) => {
       setState({
         user: user ? { coins: fromNano(user.coins), time: user.time } : null,

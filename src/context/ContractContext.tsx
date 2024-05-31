@@ -12,7 +12,7 @@ export type ContractContextState = {
 
 const defaultState: ContractContextState = {
   user: null,
-  loading: true,
+  loading: false,
   sendDeposit: () => {},
   sendWithdraw: () => {},
 };

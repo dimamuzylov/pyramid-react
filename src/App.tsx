@@ -1,34 +1,28 @@
 import './App.css';
-import { Route, Routes, useNavigate } from 'react-router-dom';
-import Home from './pages/Home';
-import FAQ from './pages/FAQ';
-import BottomNavigation from './components/BottomNavigation';
-import { NextUIProvider } from '@nextui-org/react';
 import { ContractContext } from './context/ContractContext';
 import { useContext } from 'react';
+import Background from './components/Background';
+import { TonConnectButton } from '@tonconnect/ui-react';
 
 function App() {
-  const navigate = useNavigate();
   const { loading: contractLoading } = useContext(ContractContext);
 
-  if (contractLoading) return <div>Loading...</div>;
-
   return (
-    <NextUIProvider navigate={navigate} className='flex flex-col h-screen'>
-      <div className='flex flex-col h-full'>
-        <div className='flex items-center gap-5 py-5'>
-          <div className='w-full h-0.25 bg-primary'></div>
-          <span>LOGO</span>
-          <div className='w-full h-0.25 bg-primary'></div>
-        </div>
-
-        <Routes>
-          <Route path='/' element={<Home />} />
-          <Route path='/faq' element={<FAQ />} />
-        </Routes>
+    <div className='flex flex-col px-4 h-full'>
+      <div className='flex items-center pt-4 pb-2.5 h-13.5 box-content relative'>
+        <span className='uppercase font-lexend-peta'>PYRAMID</span>
+        <img
+          src='./public/logo_pyramid.webp'
+          alt=''
+          width='54px'
+          height='54px'
+          className='absolute right-0 left-0 mx-auto'
+        />
       </div>
-      <BottomNavigation />
-    </NextUIProvider>
+      <Background>
+        {contractLoading ? <div>Loading...</div> : <TonConnectButton />}
+      </Background>
+    </div>
   );
 }
 

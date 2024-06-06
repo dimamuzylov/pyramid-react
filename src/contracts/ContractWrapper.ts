@@ -4,9 +4,11 @@ import {
   Cell,
   Contract,
   ContractProvider,
+  fromNano,
   Sender,
   SendMode,
 } from '@ton/core';
+import { Maybe } from '@ton/core/dist/utils/maybe';
 
 export class Pyramid implements Contract {
   constructor(
@@ -18,12 +20,17 @@ export class Pyramid implements Contract {
     provider: ContractProvider,
     sender: Sender,
     value: bigint,
-    days: number
+    days: number,
+    refAddress?: Maybe<Address>
   ) {
     await provider.internal(sender, {
       value,
       sendMode: SendMode.PAY_GAS_SEPARATELY,
-      body: beginCell().storeUint(1003, 32).storeUint(days, 32).endCell(),
+      body: beginCell()
+        .storeUint(1003, 32)
+        .storeUint(days, 32)
+        .storeAddress(refAddress || null)
+        .endCell(),
     });
   }
 
@@ -46,14 +53,42 @@ export class Pyramid implements Contract {
         cell: beginCell().storeAddress(address).endCell(),
       },
     ]);
-
     const tuple = result.stack.readTupleOpt();
 
     return tuple
       ? {
-          time: tuple.readNumber(),
+          unlockDate: tuple.readNumber(),
           coins: tuple.readBigNumber(),
+          days: tuple.readNumber(),
+          referralsCount: tuple.readNumber(),
+          referralAddress: tuple.readAddressOpt(),
         }
       : null;
+  }
+
+  async getConfig(provider: ContractProvider) {
+    const result = await provider.get('get_config', []);
+    const tuple = result.stack.readTuple();
+
+    const dailyPercent = fromNano(tuple.readNumber());
+    const minDays = tuple.readNumber();
+    const maxDays = tuple.readNumber();
+    let referralsProgramTuple = tuple.readTupleOpt();
+
+    const referralsProgram = [];
+
+    while (referralsProgramTuple?.remaining) {
+      referralsProgram.push({
+        referralsCount: referralsProgramTuple.readNumber(),
+        percent: fromNano(referralsProgramTuple.readBigNumber()),
+      });
+    }
+
+    return {
+      dailyPercent,
+      minDays,
+      maxDays,
+      referralsProgram,
+    };
   }
 }

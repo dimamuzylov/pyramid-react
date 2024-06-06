@@ -1,12 +1,18 @@
+import { Address } from '@ton/core';
+import { Maybe } from '@ton/core/dist/utils/maybe';
 import { createContext } from 'react';
 
 export type ContractContextState = {
   user: {
     coins: string;
-    time: number;
+    unlockDate: number;
   } | null;
   loading: boolean;
-  sendDeposit: (amount: number, days: number) => void;
+  sendDeposit: (
+    amount: number,
+    days: number,
+    refAddress?: Maybe<Address>
+  ) => void;
   sendWithdraw: () => void;
 };
 

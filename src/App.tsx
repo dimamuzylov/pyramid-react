@@ -1,11 +1,16 @@
 import './App.css';
-import { ContractContext } from './context/ContractContext';
-import { useContext } from 'react';
-import Background from './components/Background';
+import { useEffect } from 'react';
 import { TonConnectButton } from '@tonconnect/ui-react';
+import { postEvent, useMiniApp } from '@tma.js/sdk-react';
+import Scene from './components/Scene';
 
 function App() {
-  const { loading: contractLoading } = useContext(ContractContext);
+  // const tgMiniApp = useMiniApp();
+
+  // useEffect(() => {
+  //   tgMiniApp.ready();
+  //   postEvent('web_app_expand');
+  // }, [tgMiniApp]);
 
   return (
     <div className='flex flex-col px-4 h-full'>
@@ -19,9 +24,9 @@ function App() {
           className='absolute right-0 left-0 mx-auto'
         />
       </div>
-      <Background>
-        {contractLoading ? <div>Loading...</div> : <TonConnectButton />}
-      </Background>
+      <Scene>
+        <TonConnectButton />
+      </Scene>
     </div>
   );
 }

@@ -6,6 +6,7 @@ import { useTonClient } from '../hooks/useTonClient';
 import { useConnection } from '../hooks/useConnection';
 import { useTonAddress } from '@tonconnect/ui-react';
 import { Address, OpenedContract, fromNano, toNano } from '@ton/core';
+import { Maybe } from '@ton/core/dist/utils/maybe';
 
 interface Props {
   children: React.ReactNode;
@@ -23,22 +24,27 @@ export const ContractContextProvider: React.FunctionComponent<Props> = (
 
   const [state, setState] = useState<
     Pick<ContractContextState, 'user' | 'loading'>
-  >({ user: null, loading: false });
+  >({ user: null, loading: true });
 
   const mainContract = useInit(async () => {
     if (!client) return;
     const contract = new Pyramid(
-      Address.parse('EQAcWeGkhgaaaZiwUaIX8dArzvHa8_KzkhvpnhHQwaAh6hOw')
+      Address.parse('EQDVWEesGBHmdOWWLgfmimXE1Kxbilqq3osjbZg_TIAlJDUt')
     );
     return client.open(contract) as OpenedContract<Pyramid>;
   }, [client]);
 
   useEffect(() => {
-    if (!mainContract || !userFriendlyAddress) return;
+    if (!mainContract || !userFriendlyAddress) {
+      setState({ user: null, loading: false });
+      return;
+    }
     setState({ loading: true, user: null });
     mainContract.getUser(Address.parse(userFriendlyAddress)).then((user) => {
       setState({
-        user: user ? { coins: fromNano(user.coins), time: user.time } : null,
+        user: user
+          ? { coins: fromNano(user.coins), unlockDate: user.unlockDate }
+          : null,
         loading: false,
       });
     });
@@ -47,11 +53,16 @@ export const ContractContextProvider: React.FunctionComponent<Props> = (
   /**
    * Declare the update state method that will handle the state values
    */
-  const sendDeposit = (amount: number, days: number) => {
+  const sendDeposit = (
+    amount: number,
+    days: number,
+    refAddress?: Maybe<Address>
+  ) => {
     mainContract?.sendUserDeposit(
       connection.sender,
       toNano(amount.toString()),
-      days
+      days,
+      refAddress
     );
   };
 

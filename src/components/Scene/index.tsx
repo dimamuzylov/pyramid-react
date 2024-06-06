@@ -1,8 +1,7 @@
 import { Canvas, useThree } from '@react-three/fiber';
-import { Suspense, useEffect } from 'react';
-import { useSceneStore } from '../../state/scene-store';
+import { Suspense, useContext, useEffect, useState } from 'react';
+import { useSceneStore } from '@state/scene-store';
 import './index.css';
-import { Button } from '@nextui-org/button';
 
 import Background from './Background';
 import Cloud from './Cloud';
@@ -17,22 +16,43 @@ import cloudImg2 from '../../assets/cloud_2.webp';
 import cloudImg3 from '../../assets/cloud_3.webp';
 import monumentLeftImg from '../../assets/monument_left.webp';
 import monumentRightImg from '../../assets/monument_right.webp';
+import { ContractContext } from '../../context/ContractContext';
+import { useConnection } from '../../hooks/useConnection';
 
-function SceneWrapper() {
+function SceneWrapper({ walletConnected }: { walletConnected: boolean }) {
+  const [animationScene, setAnimationScene] = useState<'initial' | 'zoomIn'>(
+    'initial'
+  );
   const viewport = useThree((state) => state.viewport);
-  const animationSequence = useSceneStore((state) => state.animationSequence);
-  const animationTiming = useSceneStore((state) => state.animationTiming);
-  const updateAnimationTiming = useSceneStore(
-    (state) => state.updateAnimationTiming
+  const animationInProgress = useSceneStore(
+    (state) => state.animationInProgress
+  );
+  const updateAnimationSequence = useSceneStore(
+    (state) => state.updateAnimationSequence
   );
 
+  const animationSequence = useSceneStore((state) => state.animationSequence);
+
   useEffect(() => {
-    if (animationSequence.every((value) => value === 0)) {
-      setTimeout(() => {
-        updateAnimationTiming('zoomIn');
+    let timeout: number | undefined;
+
+    if (!animationInProgress.initial) {
+      timeout = setTimeout(() => {
+        if (animationScene === 'initial' && walletConnected) {
+          updateAnimationSequence('zoomIn', 0, 1);
+          updateAnimationSequence('zoomIn', 1, 1);
+          setAnimationScene('zoomIn');
+        }
+        if (animationScene === 'zoomIn' && !walletConnected) {
+          updateAnimationSequence('zoomOut', 0, 1);
+          updateAnimationSequence('zoomOut', 1, 1);
+          setAnimationScene('initial');
+        }
       }, 500);
     }
-  }, [animationSequence]);
+
+    return () => clearTimeout(timeout);
+  }, [walletConnected, animationSequence, animationScene]);
 
   return (
     <>
@@ -52,47 +72,61 @@ function SceneWrapper() {
         position={[-viewport.width / 2, 3, 0]}
         aspect={[1, 0.48, 0.15]}
       />
-      <Pyramid
-        finalPositionY={animationTiming === 'initial' ? 0 : 3.7}
-        animationSpeed={1.5}
-      />
+      <Pyramid />
       <Floor />
       <Background>
         <Monument image={monumentLeftImg} />
         <Monument image={monumentRightImg} isReversed />
       </Background>
       <Sphinx />
-      <Camera zoomIn={animationTiming === 'zoomIn'} />
+      <Camera />
     </>
   );
 }
 
-function Scene({ children }: any) {
-  const animationTiming = useSceneStore((state) => state.animationTiming);
+function Scene({ children }: { children: any }) {
+  const { loading: contractLoading } = useContext(ContractContext);
+  const { connected: walletConnected } = useConnection();
+  const animationInProgress = useSceneStore(
+    (state) => state.animationInProgress
+  );
+  const animationSequence = useSceneStore((state) => state.animationSequence);
+  const [opacity, setOpacityState] = useState(0);
+  const [bgClass, setBgClassState] = useState('');
+
+  useEffect(() => {
+    const initialAnimated = !animationInProgress.initial;
+    const zoomInAnimated = !animationInProgress.zoomIn;
+    const animated = walletConnected
+      ? initialAnimated && zoomInAnimated
+      : initialAnimated;
+
+    if (animated && !contractLoading) {
+      setOpacityState(1);
+    }
+
+    if (zoomInAnimated) {
+      setBgClassState('blue');
+    }
+  }, [animationSequence, contractLoading]);
 
   return (
     <div className='h-full rounded-t-3xl overflow-hidden relative'>
       <div
         className='content-wrapper flex flex-col h-full relative z-50 px-5'
-        style={{ opacity: animationTiming === 'done' ? 1 : 0 }}
+        style={{
+          opacity,
+        }}
       >
         {children}
-        <Button
-          className='mb-10 mt-20 text-center text-white font-inter h-15'
-          variant='light'
-        >
-          FAQ
-        </Button>
       </div>
       <div className='background-container absolute top-0 bottom-0 left-0 right-0'>
         <div
-          className={`background-overlay ${
-            animationTiming === 'done' && 'blue'
-          } absolute top-0 bottom-0 left-0 right-0 z-10`}
+          className={`background-overlay ${bgClass} absolute top-0 bottom-0 left-0 right-0 z-10`}
         ></div>
         <Canvas>
           <Suspense fallback={null}>
-            <SceneWrapper />
+            <SceneWrapper walletConnected={walletConnected} />
           </Suspense>
         </Canvas>
       </div>

@@ -24,6 +24,6 @@ export function useConnection(): {
       },
     },
     connected: TonConnectUI.connected,
-    disconnect: TonConnectUI.disconnect,
+    disconnect: () => TonConnectUI.disconnect(),
   };
 }

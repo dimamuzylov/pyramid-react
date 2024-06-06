@@ -9,6 +9,7 @@ import {
   SendMode,
 } from '@ton/core';
 import { Maybe } from '@ton/core/dist/utils/maybe';
+import { User } from '../types/user';
 
 export class Pyramid implements Contract {
   constructor(
@@ -46,7 +47,10 @@ export class Pyramid implements Contract {
     });
   }
 
-  async getUser(provider: ContractProvider, address: Address) {
+  async getUser(
+    provider: ContractProvider,
+    address: Address
+  ): Promise<User | null> {
     const result = await provider.get('get_user', [
       {
         type: 'slice',
@@ -58,7 +62,7 @@ export class Pyramid implements Contract {
     return tuple
       ? {
           unlockDate: tuple.readNumber(),
-          coins: tuple.readBigNumber(),
+          coins: fromNano(tuple.readBigNumber()),
           days: tuple.readNumber(),
           referralsCount: tuple.readNumber(),
           referralAddress: tuple.readAddressOpt(),

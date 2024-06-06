@@ -1,3 +1,8 @@
+export type LinearAnimation = {
+  result: (current: number) => number;
+  calculate: (current: number, speed: number) => number;
+};
+
 /**
  *
  * @param breakpoints [position in percent, number]
@@ -6,7 +11,7 @@ export function createLinearAnimation(
   from: number,
   to: number,
   breakpoints: [number, number][]
-): { result: (current: number) => number } {
+): LinearAnimation {
   const total = to - from; // total distance
 
   const lastBreakpoint = breakpoints[breakpoints.length - 1][1];
@@ -23,6 +28,13 @@ export function createLinearAnimation(
       }
 
       return breakpoints[currentBreakpointIndex]?.[1] || lastBreakpoint;
+    },
+    calculate: (current, speed) => {
+      const result = current + speed;
+      const currD = to - current; // current distance
+      const left = total - currD + speed; // distance left
+
+      return Math.abs(left) >= Math.abs(total) ? to : result;
     },
   };
 }

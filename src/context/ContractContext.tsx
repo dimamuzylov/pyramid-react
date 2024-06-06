@@ -1,12 +1,10 @@
 import { Address } from '@ton/core';
 import { Maybe } from '@ton/core/dist/utils/maybe';
 import { createContext } from 'react';
+import { User } from '../types/user';
 
 export type ContractContextState = {
-  user: {
-    coins: string;
-    unlockDate: number;
-  } | null;
+  user: User | null;
   loading: boolean;
   sendDeposit: (
     amount: number,

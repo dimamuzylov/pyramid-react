@@ -2,8 +2,8 @@ import { useAspect } from '@react-three/drei/core/useAspect';
 import { useFrame, useLoader } from '@react-three/fiber';
 import { useRef } from 'react';
 import * as THREE from 'three';
-import { useSceneStore } from '../../state/scene-store';
-import { createLinearAnimation } from '../../utils/threejs-animation';
+import { useSceneStore } from '@state/scene-store';
+import { createLinearAnimation } from '@utils/threejs-animation';
 import { Plane } from '@react-three/drei/core/shapes';
 
 function Monument({
@@ -19,8 +19,8 @@ function Monument({
   const updateAnimationSequence = useSceneStore(
     (state) => state.updateAnimationSequence
   );
-  const getAnimationSequence = useSceneStore(
-    (state) => state.getAnimationSequence
+  const animationInProgress = useSceneStore(
+    (state) => state.animationInProgress
   );
 
   const positionX = isReversed ? 1 : -1;
@@ -35,12 +35,21 @@ function Monument({
     [60, 0.005],
     [100, 0.003],
   ]);
+
   useFrame(() => {
-    if (isFinalPosition(ref.current.position.x)) {
-      const speed = linearAnimation.result(ref.current.position.x);
-      ref.current.position.x = ref.current.position.x + speed * -positionX;
-    } else if (getAnimationSequence(isReversed ? 2 : 1) === 1) {
-      updateAnimationSequence(isReversed ? 2 : 1, 0);
+    if (
+      isFinalPosition(ref.current.position.x) &&
+      animationInProgress.initial
+    ) {
+      const speed = linearAnimation.result(ref.current.position.x) * -positionX;
+      ref.current.position.x = linearAnimation.calculate(
+        ref.current.position.x,
+        speed
+      );
+
+      if (ref.current.position.x === finalPositionX) {
+        updateAnimationSequence('initial', isReversed ? 2 : 1, 0);
+      }
     }
   });
 

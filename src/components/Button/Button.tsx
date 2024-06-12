@@ -7,12 +7,12 @@ function Button(props: ButtonProps) {
     <NextUiButton
       {...props}
       disableRipple
-      onClick={(e) => {
+      onPress={(e) => {
         postEvent('web_app_trigger_haptic_feedback', {
           type: 'impact',
           impact_style: 'soft',
         });
-        props.onClick?.(e);
+        props.onPress?.(e);
       }}
       className={`text-center h-15 ${props.className || ''} ${props.variant}`}
     >

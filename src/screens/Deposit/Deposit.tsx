@@ -7,6 +7,7 @@ import Button from '../../components/Button';
 import DaysPicker from '../../components/DaysPicker';
 import QuickPicks from '../../components/QuickPicks';
 import { dayPicks, quickPicks } from './deposit-constans';
+import FAQ from '../../components/FAQ';
 
 type TonRatesApiResponse = {
   rates: {
@@ -87,7 +88,7 @@ function Deposit() {
       <Button
         variant='solid'
         className='mb-2'
-        onClick={() => {
+        onPress={() => {
           // if (!config) return;
           // if (days >= config.minDays && days <= config.maxDays) {
           // }
@@ -96,7 +97,7 @@ function Deposit() {
       >
         Deposit
       </Button>
-      <Button variant='light'>FAQ</Button>
+      <FAQ />
     </div>
   );
 }

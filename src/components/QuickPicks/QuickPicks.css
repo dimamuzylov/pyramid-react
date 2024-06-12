@@ -1,0 +1,9 @@
+.quick-picks {
+    .active {
+        background: linear-gradient(180deg,
+                #6440ac 0%,
+                rgba(255, 255, 255, 0.1) 200%);
+
+        @apply text-white;
+    }
+}

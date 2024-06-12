@@ -1,4 +1,4 @@
-import { useTonConnectUI } from '@tonconnect/ui-react';
+import { useTonConnectUI, useTonWallet } from '@tonconnect/ui-react';
 import { Sender, SenderArguments } from '@ton/core';
 
 export function useConnection(): {
@@ -7,6 +7,7 @@ export function useConnection(): {
   disconnect(): Promise<void>;
 } {
   const [TonConnectUI] = useTonConnectUI();
+  const wallet = useTonWallet();
 
   return {
     sender: {
@@ -23,7 +24,7 @@ export function useConnection(): {
         });
       },
     },
-    connected: TonConnectUI.connected,
+    connected: !!wallet?.account,
     disconnect: () => TonConnectUI.disconnect(),
   };
 }

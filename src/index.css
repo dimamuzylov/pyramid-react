@@ -5,6 +5,20 @@
 html,
 body,
 #root {
-  width: 100%;
-  height: 100%;
+  @apply font-inter;
+}
+
+body {
+  overflow: hidden;
+  height: 100vh;
+}
+
+#root {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
 }

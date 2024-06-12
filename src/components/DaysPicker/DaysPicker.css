@@ -1,0 +1,10 @@
+.swiper {
+    width: 100%;
+}
+
+.swiper-slide {
+    width: 33.3%;
+    height: 90px;
+
+    @apply flex flex-col items-center justify-center
+}

@@ -19,10 +19,17 @@ import monumentRightImg from '../../assets/monument_right.webp';
 import { ContractContext } from '../../context/ContractContext';
 import { useConnection } from '../../hooks/useConnection';
 
-function SceneWrapper({ walletConnected }: { walletConnected: boolean }) {
-  const [animationScene, setAnimationScene] = useState<'initial' | 'zoomIn'>(
-    'initial'
-  );
+type AnimationScene = 'initial' | 'zoomIn';
+
+function SceneWrapper({
+  walletConnected,
+  animationScene,
+  setAnimationScene,
+}: {
+  walletConnected: boolean;
+  animationScene: AnimationScene;
+  setAnimationScene: (scene: AnimationScene) => void;
+}) {
   const viewport = useThree((state) => state.viewport);
   const animationInProgress = useSceneStore(
     (state) => state.animationInProgress
@@ -91,42 +98,41 @@ function Scene({ children }: { children: any }) {
     (state) => state.animationInProgress
   );
   const animationSequence = useSceneStore((state) => state.animationSequence);
+  const [animationScene, setAnimationScene] = useState<'initial' | 'zoomIn'>(
+    'initial'
+  );
   const [opacity, setOpacityState] = useState(0);
-  const [bgClass, setBgClassState] = useState('');
 
   useEffect(() => {
     const initialAnimated = !animationInProgress.initial;
     const zoomInAnimated = !animationInProgress.zoomIn;
     const animated = walletConnected
-      ? initialAnimated && zoomInAnimated
+      ? initialAnimated && zoomInAnimated && animationScene === 'zoomIn'
       : initialAnimated;
 
     if (animated && !contractLoading) {
       setOpacityState(1);
     }
-
-    if (zoomInAnimated) {
-      setBgClassState('blue');
-    }
-  }, [animationSequence, contractLoading]);
+  }, [animationSequence, animationScene, contractLoading]);
 
   return (
-    <div className='h-full rounded-t-3xl overflow-hidden relative'>
+    <div className='flex flex-col relative flex-1'>
       <div
-        className='content-wrapper flex flex-col h-full relative z-50 px-5'
+        className='content-wrapper flex flex-col relative z-50 px-5 flex-1'
         style={{
           opacity,
         }}
       >
         {children}
       </div>
-      <div className='background-container absolute top-0 bottom-0 left-0 right-0'>
-        <div
-          className={`background-overlay ${bgClass} absolute top-0 bottom-0 left-0 right-0 z-10`}
-        ></div>
+      <div className='background-container absolute rounded-t-3xl overflow-hidden  top-0 bottom-0 left-0 right-0'>
         <Canvas>
           <Suspense fallback={null}>
-            <SceneWrapper walletConnected={walletConnected} />
+            <SceneWrapper
+              walletConnected={walletConnected}
+              animationScene={animationScene}
+              setAnimationScene={setAnimationScene}
+            />
           </Suspense>
         </Canvas>
       </div>

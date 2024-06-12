@@ -1,0 +1,21 @@
+.outcome,
+.outcome-symbol {
+  background: -webkit-linear-gradient(
+    90deg,
+    #6440ac 0%,
+    rgba(255, 255, 255, 0.1) 200%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.days-picker {
+  margin: 0 10%;
+  width: calc(100% - 20%) !important;
+  position: relative;
+}
+
+.background-overlay-deposit {
+  background: linear-gradient(180deg, rgba(119, 181, 230, 0) 50%, #74B4E5 100%);
+  z-index: -1;
+}

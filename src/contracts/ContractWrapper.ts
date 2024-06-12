@@ -10,6 +10,7 @@ import {
 } from '@ton/core';
 import { Maybe } from '@ton/core/dist/utils/maybe';
 import { User } from '../types/user';
+import { ContractConfig } from '../types/contract-config';
 
 export class Pyramid implements Contract {
   constructor(
@@ -70,11 +71,11 @@ export class Pyramid implements Contract {
       : null;
   }
 
-  async getConfig(provider: ContractProvider) {
+  async getConfig(provider: ContractProvider): Promise<ContractConfig> {
     const result = await provider.get('get_config', []);
     const tuple = result.stack.readTuple();
 
-    const dailyPercent = fromNano(tuple.readNumber());
+    const dailyPercent = Number(fromNano(tuple.readNumber()));
     const minDays = tuple.readNumber();
     const maxDays = tuple.readNumber();
     let referralsProgramTuple = tuple.readTupleOpt();
@@ -84,7 +85,7 @@ export class Pyramid implements Contract {
     while (referralsProgramTuple?.remaining) {
       referralsProgram.push({
         referralsCount: referralsProgramTuple.readNumber(),
-        percent: fromNano(referralsProgramTuple.readBigNumber()),
+        percent: Number(fromNano(referralsProgramTuple.readBigNumber())),
       });
     }
 

@@ -5,11 +5,3 @@
 .background-container {
     background-color: #e8c2f8;
 }
-
-.background-overlay {
-    background: linear-gradient(180deg, rgba(136, 89, 141, 0) 64.77%, #8B7BF2 100%);
-
-    &.blue {
-        background: linear-gradient(180deg, rgba(119, 181, 230, 0) 49.22%, #74B4E5 100%);
-    }
-}

@@ -5,7 +5,7 @@ import { Pyramid } from '../contracts/ContractWrapper';
 import { useTonClient } from '../hooks/useTonClient';
 import { useConnection } from '../hooks/useConnection';
 import { useTonAddress } from '@tonconnect/ui-react';
-import { Address, OpenedContract, fromNano, toNano } from '@ton/core';
+import { Address, OpenedContract, toNano } from '@ton/core';
 import { Maybe } from '@ton/core/dist/utils/maybe';
 
 interface Props {
@@ -23,8 +23,8 @@ export const ContractContextProvider: React.FunctionComponent<Props> = (
   const userFriendlyAddress = useTonAddress();
 
   const [state, setState] = useState<
-    Pick<ContractContextState, 'user' | 'loading'>
-  >({ user: null, loading: true });
+    Pick<ContractContextState, 'user' | 'config' | 'loading'>
+  >({ user: null, config: null, loading: true });
 
   const mainContract = useInit(async () => {
     if (!client) return;
@@ -36,15 +36,17 @@ export const ContractContextProvider: React.FunctionComponent<Props> = (
 
   useEffect(() => {
     if (!mainContract || !userFriendlyAddress) {
-      setState({ user: null, loading: false });
+      setState({ ...state, loading: false });
       return;
     }
-    setState({ loading: true, user: null });
-    mainContract.getUser(Address.parse(userFriendlyAddress)).then((user) => {
+    setState({ ...state, loading: true });
+    Promise.all([
+      mainContract.getUser(Address.parse(userFriendlyAddress)),
+      mainContract.getConfig(),
+    ]).then(([user, config]) => {
       setState({
-        user: user
-          ? { coins: fromNano(user.coins), unlockDate: user.unlockDate }
-          : null,
+        user,
+        config,
         loading: false,
       });
     });

@@ -7,6 +7,8 @@ import { useConnection } from '../hooks/useConnection';
 import { useTonAddress } from '@tonconnect/ui-react';
 import { Address, OpenedContract, toNano } from '@ton/core';
 import { Maybe } from '@ton/core/dist/utils/maybe';
+import { ContractConfig } from '../types/contract-config';
+import { User } from '../types/user';
 
 interface Props {
   children: React.ReactNode;
@@ -35,18 +37,24 @@ export const ContractContextProvider: React.FunctionComponent<Props> = (
   }, [client]);
 
   useEffect(() => {
-    if (!mainContract || !userFriendlyAddress) {
+    if (!mainContract) {
       setState({ ...state, loading: false });
       return;
     }
     setState({ ...state, loading: true });
-    Promise.all([
-      mainContract.getUser(Address.parse(userFriendlyAddress)),
+
+    const requests: Partial<[Promise<ContractConfig>, Promise<User | null>]> = [
       mainContract.getConfig(),
-    ]).then(([user, config]) => {
+    ];
+
+    if (userFriendlyAddress) {
+      requests.push(mainContract.getUser(Address.parse(userFriendlyAddress)));
+    }
+
+    Promise.all(requests).then(([config, user]) => {
       setState({
-        user,
-        config,
+        user: user || null,
+        config: config || null,
         loading: false,
       });
     });

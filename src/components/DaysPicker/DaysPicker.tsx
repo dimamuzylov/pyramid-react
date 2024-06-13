@@ -29,7 +29,7 @@ function DaysPicker({ days, onDaysChange, className }: DaysPickerProps) {
       slidesPerView={'auto'}
       grabCursor={true}
       centeredSlides={true}
-      initialSlide={2}
+      initialSlide={1}
       onSlideChange={(e) => {
         onDaysChange?.(days[e.activeIndex]);
 

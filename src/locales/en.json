@@ -1,0 +1,42 @@
+{
+  "faq": {
+    "title": "Earn money in just a few clicks! <span className='font-lexend-peta'>PYRAMID</span> — a fair financial pyramid without hidden pitfalls.",
+    "paragraphs": {
+      "1": "How does it work? Stake for the maximum allowable period for you and earn profit without doing anything.",
+      "2": "In just 33 days of staking, you can double your investments, and in 77 days — triple them. The maximum allowable staking period is 365 days, which means a 12x profit. Just imagine, you invest only 50 TON for 365 days and end up with ~600 TON. Not bad for passive income, right?",
+      "3": "Your earnings can become even higher if you invite your friends to play the game. In this case, with just 10 invitations, you increase your income almost twice — up to ~960 TON of net profit.",
+      "4": "Earn more by inviting friends! Referral system: Each friend you invite must stake any amount from 1 to 50 TON for your invitation to count. After the invited user withdraws their funds, you can invite them again. This process can be repeated infinitely."
+    },
+    "referralsTableTitle": "Number of invitations (Daily percentage)",
+    "referralsTableHeader": {
+      "referralsCount": "Number of referrals",
+      "dailyPercent": "Percentage"
+    },
+    "questions": {
+      "1": {
+        "question": "What is a pyramid?",
+        "answer": "A pyramid is an investment scheme that allows you to multiply your investments several times. But there are risks, so you might lose your money when the influx of new users decreases and our bank collapses. This game is for those who are not afraid to take risks and believe in their luck."
+      },
+      "2": {
+        "question": "How does staking work?",
+        "answer": "We offer a simple and clear profit strategy: stake from 1 to 50 TON and receive 3% daily profit. The more our bank fills up, the higher the probability of withdrawing the earned amount. The bank depends on the number of people staking. If the bank doesn't have the amount you want to withdraw, consider that you've lost in this game. Want to withdraw as much money as possible? Invite friends using our referral program (link)."
+      },
+      "3": {
+        "question": "Why should I join PYRAMID?",
+        "answer": "It's a great chance to multiply your investments in just a few weeks. The game's model is based on a primitive financial pyramid. The more people invest, the higher the probability of getting your money back. But remember, this is a game of luck and risk."
+      },
+      "4": {
+        "question": "What formula is used for withdrawal calculation?",
+        "answer": "x - number of freezing days <br/> y - daily percentage <br/> k - total percentage for the entire freezing period <br/> d - staking amount <br/> q - earned amount <br/> w - withdrawal amount <br/><br/> k = x * y <br/> q = (d * k) / 100 <br/> w = d + q <br/><br/> Example: <br/> x = 33 <br/> y = 3 <br/> k = 33 * 3 = 99 <br/> d = 50 <br/> q = (50 * 99) / 100 = 49.5 <br/> w = 50 + 49.5 = 99.5 <br/><br/> Thus, in a month without any referral programs, I earned ~100 TON doing nothing."
+      },
+      "5": {
+        "question": "What are the risks?",
+        "answer": "Always remember that there is a chance you won't get your money back. That's why we set staking limits so you can't give away the last of your money trying to double it. To minimize the risk of losing, invite new people to this game."
+      },
+      "6": {
+        "question": "Why might I not be able to withdraw money?",
+        "answer": "Only if the bank doesn't have enough funds. To avoid this, use our referral system to attract new users."
+      }
+    }
+  }
+}

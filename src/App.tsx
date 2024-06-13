@@ -4,7 +4,7 @@ import { postEvent, useMiniApp } from '@tma.js/sdk-react';
 import Scene from './components/Scene';
 import Container from './screens/Container';
 import { useConnection } from './hooks/useConnection';
-import ExitIcon from './icons/Exit';
+import Icon from './components/Icon';
 
 function App() {
   const { connected, disconnect } = useConnection();
@@ -28,7 +28,7 @@ function App() {
         />
         {connected && (
           <button onClick={disconnect} className='w-5 h-5 text-black'>
-            <ExitIcon />
+            <Icon icon='Exit' />
           </button>
         )}
       </div>

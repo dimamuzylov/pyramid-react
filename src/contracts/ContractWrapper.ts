@@ -66,7 +66,6 @@ export class Pyramid implements Contract {
           coins: fromNano(tuple.readBigNumber()),
           days: tuple.readNumber(),
           referralsCount: tuple.readNumber(),
-          referralAddress: tuple.readAddressOpt(),
         }
       : null;
   }

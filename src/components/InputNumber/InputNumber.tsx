@@ -54,7 +54,7 @@ function InputNumber({
         inputMode='decimal'
         className='text-4xl outline-none text-right min-w-10'
         value={value}
-        ref={ref}
+        ref={ref as any}
         onChange={(e) => {
           const newValue = getValue(e, min, max);
           if (ref.current && newValue)

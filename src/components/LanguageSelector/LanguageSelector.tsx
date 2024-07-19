@@ -34,7 +34,7 @@ export function LanguageSelector(props: LanguageSelectorProps) {
       className={`${props.className} w-20`}
       selectionMode='single'
       selectedKeys={values}
-      onSelectionChange={setValues}
+      onSelectionChange={setValues as any}
       renderValue={(items) =>
         items.map((item) => (
           <div key={item.data!.key}>

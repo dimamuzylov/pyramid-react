@@ -3,9 +3,9 @@ import Button from '../Button';
 import FAQModal from '../FAQModal';
 import { HTMLAttributes } from 'react';
 
-type FAQProps = HTMLAttributes<unknown>;
+type FAQButtonProps = HTMLAttributes<unknown>;
 
-function FAQ(props?: FAQProps) {
+function FAQButton(props?: FAQButtonProps) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   return (
@@ -18,4 +18,4 @@ function FAQ(props?: FAQProps) {
   );
 }
 
-export default FAQ;
+export default FAQButton;

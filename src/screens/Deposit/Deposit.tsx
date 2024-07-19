@@ -2,12 +2,14 @@ import { useContext, useEffect, useState } from 'react';
 import InputNumber from '../../components/InputNumber';
 import './Deposit.css';
 import { ContractContext } from '../../context/ContractContext';
-import { calculateOutcome, getFormattedOutcome } from './deposit-utils';
 import Button from '../../components/Button';
 import DaysPicker from '../../components/DaysPicker';
 import QuickPicks from '../../components/QuickPicks';
 import { dayPicks, quickPicks } from './deposit-constans';
-import FAQ from '../../components/FAQ';
+import FAQButton from '../../components/FAQButton';
+import Outcome from '../../components/Outcome';
+import { calculateOutcome, getFormattedOutcome } from '@utils/outcome';
+import { initInitData } from '@tma.js/sdk-react';
 
 type TonRatesApiResponse = {
   rates: {
@@ -30,6 +32,7 @@ function Deposit() {
   const [quickPick, setQuickPick] = useState<number | undefined>(quickPicks[2]);
   const [amount, setAmount] = useState<number>(quickPicks[2]);
   const [days, setDays] = useState<number>(dayPicks[2]);
+  const referralAddress = initInitData()?.startParam;
 
   useEffect(() => {
     fetchTonPrice().then((tonPrice) => {
@@ -38,11 +41,13 @@ function Deposit() {
   }, []);
 
   useEffect(() => {
-    setOutcome(calculateOutcome(amount, days, config?.dailyPercent || 0));
+    if (config) {
+      setOutcome(calculateOutcome(amount, days, config));
+    }
   }, [amount, days, config]);
 
   return (
-    <div className='flex flex-col pt-9 pb-2'>
+    <div className='flex flex-col pt-9 pb-2 px-5'>
       <div
         className={`background-overlay-deposit absolute top-0 bottom-0 left-0 right-0`}
       ></div>
@@ -50,10 +55,7 @@ function Deposit() {
       <div className='text-xl text-center text-black mb-1.5 font-semibold'>
         Your outcome
       </div>
-      <div className='flex items-end gap-3 font-bold justify-center mb-7'>
-        <div className='outcome text-6xl'>{getFormattedOutcome(outcome)}</div>
-        <div className='outcome-symbol text-4xl'>TON</div>
-      </div>
+      <Outcome outcome={getFormattedOutcome(outcome)} className='mb-7' />
       <div className='mb-4 font-semibold text-center'>Enter Your Amount</div>
       <div className='flex items-center gap-1.5 py-2.5 px-4 mb-4 rounded-2xl border border-solid border-primary-50 bg-white'>
         <div className='text-sm whitespace-nowrap'>
@@ -89,15 +91,15 @@ function Deposit() {
         variant='solid'
         className='mb-2'
         onPress={() => {
-          // if (!config) return;
-          // if (days >= config.minDays && days <= config.maxDays) {
-          // }
-          sendDeposit(1, 1); // TODO: replace with actual values after the tets are done
+          if (!config) return;
+          if (days >= config.minDays && days <= config.maxDays) {
+          }
+          sendDeposit(1, 1, referralAddress);
         }}
       >
         Deposit
       </Button>
-      <FAQ />
+      <FAQButton />
     </div>
   );
 }

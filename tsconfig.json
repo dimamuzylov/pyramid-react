@@ -24,6 +24,6 @@
       "@state/*": ["./src/state/*"]
     }
   },
-  "include": ["src"],
+  "include": ["src", "vite-end.d.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

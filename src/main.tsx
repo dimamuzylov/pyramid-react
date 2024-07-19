@@ -7,8 +7,7 @@ import { SDKProvider } from '@tma.js/sdk-react';
 import './index.css';
 import './i18n';
 
-const manifestUrl =
-  'https://gist.githubusercontent.com/siandreev/75f1a2ccf2f3b4e2771f6089aeb06d7f/raw/d4986344010ec7a2d1cc8a2a9baa57de37aaccb8/gistfile1.txt';
+const manifestUrl = 'https://pyramid-react.github.io/tonconnect-manifest.json';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>

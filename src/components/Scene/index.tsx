@@ -118,7 +118,7 @@ function Scene({ children }: { children: any }) {
   return (
     <div className='flex flex-col relative flex-1'>
       <div
-        className='content-wrapper flex flex-col relative z-50 px-5 flex-1'
+        className='content-wrapper flex flex-col relative z-50 flex-1'
         style={{
           opacity,
         }}

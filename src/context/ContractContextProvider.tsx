@@ -6,7 +6,6 @@ import { useTonClient } from '../hooks/useTonClient';
 import { useConnection } from '../hooks/useConnection';
 import { useTonAddress } from '@tonconnect/ui-react';
 import { Address, OpenedContract, toNano } from '@ton/core';
-import { Maybe } from '@ton/core/dist/utils/maybe';
 import { ContractConfig } from '../types/contract-config';
 import { User } from '../types/user';
 
@@ -31,7 +30,7 @@ export const ContractContextProvider: React.FunctionComponent<Props> = (
   const mainContract = useInit(async () => {
     if (!client) return;
     const contract = new Pyramid(
-      Address.parse('EQDVWEesGBHmdOWWLgfmimXE1Kxbilqq3osjbZg_TIAlJDUt')
+      Address.parse('EQBNDBuXa7ChuVjpa0XaZ7NPM9p-k_pwHBP6eLRIbQTyRsse')
     );
     return client.open(contract) as OpenedContract<Pyramid>;
   }, [client]);
@@ -63,21 +62,19 @@ export const ContractContextProvider: React.FunctionComponent<Props> = (
   /**
    * Declare the update state method that will handle the state values
    */
-  const sendDeposit = (
-    amount: number,
-    days: number,
-    refAddress?: Maybe<Address>
-  ) => {
-    mainContract?.sendUserDeposit(
+  const sendDeposit = (amount: number, days: number, refAddress?: string) => {
+    if (!mainContract) return;
+    mainContract.sendUserDeposit(
       connection.sender,
       toNano(amount.toString()),
       days,
-      refAddress
+      refAddress ? Address.parse(refAddress) : undefined
     );
   };
 
   const sendWithdraw = () => {
-    mainContract?.sendUserWithdraw(connection.sender, toNano('0.05'));
+    if (!mainContract) return;
+    mainContract.sendUserWithdraw(connection.sender, toNano('0.05'));
   };
 
   /**

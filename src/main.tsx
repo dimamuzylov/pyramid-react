@@ -4,15 +4,14 @@ import App from './App.tsx';
 import { TonConnectUIProvider } from '@tonconnect/ui-react';
 import { ContractContextProvider } from './context/ContractContextProvider.tsx';
 import { SDKProvider } from '@tma.js/sdk-react';
+import { environment } from '@environment';
 import './index.css';
 import './i18n';
-
-const manifestUrl = 'https://pyramid-react.github.io/tonconnect-manifest.json';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <SDKProvider debug acceptCustomStyles>
-      <TonConnectUIProvider manifestUrl={manifestUrl}>
+      <TonConnectUIProvider manifestUrl={environment.tonProviderManifestUrl}>
         <ContractContextProvider>
           <App />
         </ContractContextProvider>

@@ -21,7 +21,8 @@
     "noFallthroughCasesInSwitch": true,
     "paths": {
       "@utils/*": ["./src/utils/*"],
-      "@state/*": ["./src/state/*"]
+      "@state/*": ["./src/state/*"],
+      "@environment": ["./environment/environment.ts"]
     }
   },
   "include": ["src", "vite-end.d.ts"],

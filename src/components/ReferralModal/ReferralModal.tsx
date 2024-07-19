@@ -18,6 +18,7 @@ import { useContext } from 'react';
 import { ContractContext } from '../../context/ContractContext';
 import Icon from '../Icon';
 import { useTonAddress } from '@tonconnect/ui-react';
+import { environment } from '@environment';
 
 type UseDisclosureReturn = ReturnType<typeof useDisclosure>;
 
@@ -44,8 +45,7 @@ function ReferralModal(props?: Partial<UseDisclosureReturn>) {
             variant='bordered'
             readOnly
             value={
-              'https://t.me/pyramiddddd_bot/Pyramid?startapp=' +
-              userFriendlyAddress
+              environment.telegramWebAppUrl + '?startapp=' + userFriendlyAddress
             }
             endContent={
               <button className='focus:outline-none' type='button'>

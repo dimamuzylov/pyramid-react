@@ -20,7 +20,7 @@ function App() {
       <div className='flex items-center justify-between pt-4 pb-2.5 h-13.5 box-content relative shrink-0'>
         <span className='uppercase font-lexend-peta'>PYRAMID</span>
         <img
-          src='./public/logo_pyramid.webp'
+          src='./logo_pyramid.webp'
           alt=''
           width='54px'
           height='54px'

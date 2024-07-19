@@ -37,7 +37,7 @@ function Withdraw() {
   }, [user, config]);
 
   return (
-    <div className='flex flex-col pt-9'>
+    <div className='flex flex-col pt-9 flex-1'>
       <div className='flex flex-col px-5'>
         <div className='text-xl text-center text-black mb-1.5 font-semibold'>
           Your outcome
@@ -58,7 +58,7 @@ function Withdraw() {
         )}
       </div>
 
-      <div className='invite-friend-info flex flex-col rounded-t-3xl pt-10 px-5 text-center text-white'>
+      <div className='invite-friend-info flex flex-col mt-auto rounded-t-3xl pt-10 px-5 text-center text-white'>
         <div className='text-3xl font-medium mb-2.5'>Wanna get +7%?</div>
         <div className='font-medium mb-7'>
           Invite new users, and after they deposit in Pyramid, you'll get your

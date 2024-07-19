@@ -14,7 +14,7 @@ import {
   TableHeader,
   TableRow,
 } from '@nextui-org/table';
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { ContractContext } from '../../context/ContractContext';
 import Icon from '../Icon';
 import { useTonAddress } from '@tonconnect/ui-react';
@@ -24,8 +24,18 @@ type UseDisclosureReturn = ReturnType<typeof useDisclosure>;
 
 function ReferralModal(props?: Partial<UseDisclosureReturn>) {
   const userFriendlyAddress = useTonAddress();
+  const [copied, setCopied] = useState<boolean>();
   const { config } = useContext(ContractContext);
   const referralsProgram = config?.referralsProgram || [];
+  const referralLink =
+    environment.telegramWebAppUrl + '?startapp=' + userFriendlyAddress;
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setCopied(false);
+    }, 1000);
+    return () => clearTimeout(timeout);
+  }, [copied]);
 
   return (
     <Modal
@@ -44,12 +54,21 @@ function ReferralModal(props?: Partial<UseDisclosureReturn>) {
           <Input
             variant='bordered'
             readOnly
-            value={
-              environment.telegramWebAppUrl + '?startapp=' + userFriendlyAddress
-            }
+            value={referralLink}
             endContent={
               <button className='focus:outline-none' type='button'>
-                <Icon icon='Copy' className='w-5 h-5' />
+                {copied ? (
+                  <Icon icon='Checkmark' className='w-5 h-5 cursor-default' />
+                ) : (
+                  <Icon
+                    icon='Copy'
+                    className='w-5 h-5'
+                    onClick={() => {
+                      window.navigator.clipboard.writeText(referralLink);
+                      setCopied(true);
+                    }}
+                  />
+                )}
               </button>
             }
             type='text'
